@@ -1,0 +1,186 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2024-12-13",
+  "common_fields": ["cpf", "telefone"],
+  "financeiras": [
+    {
+      "id": "parcela_mais",
+      "nome": "Parcela Mais",
+      "url": "https://parcelamais.com/novaportal",
+      "resposta": "manual",
+      "prioridade": 5,
+      "campos": {
+        "cpf": {"tipo": "input", "obrigatorio": true, "validacao": "cpf"},
+        "nome": {"tipo": "input", "obrigatorio": true},
+        "data_nascimento": {"tipo": "date", "obrigatorio": true, "formato": "DD/MM/YYYY"},
+        "email": {"tipo": "input", "obrigatorio": true, "validacao": "email"},
+        "telefone": {"tipo": "input", "obrigatorio": true, "validacao": "telefone"},
+        "cep": {"tipo": "input", "obrigatorio": true, "validacao": "cep"}
+      },
+      "fluxo": [
+        {"acao": "login"},
+        {"acao": "navegar", "destino": "Financiamentos"},
+        {"acao": "clicar", "elemento": "+ SOLICITAR"},
+        {"acao": "selecionar", "opcao": "Financiamento"},
+        {"acao": "selecionar", "opcao": "Completo"},
+        {"acao": "preencher", "campo": "cpf", "aguardar_validacao": true},
+        {"acao": "preencher_formulario"},
+        {"acao": "submeter"}
+      ]
+    },
+    {
+      "id": "aviva",
+      "nome": "Aviva",
+      "url": "https://grupomello.avivapay.com.br/flipcred/pedidos",
+      "resposta": "manual",
+      "prioridade": 6,
+      "observacao": "UNICA que pede procedimento ANTES da pre-aprovacao",
+      "campos": {
+        "cpf": {"tipo": "input", "obrigatorio": true, "validacao": "cpf"},
+        "nome": {"tipo": "input", "obrigatorio": true, "auto_preenchido": true},
+        "whatsapp": {"tipo": "input", "obrigatorio": true, "validacao": "telefone"},
+        "procedimento": {"tipo": "dropdown", "obrigatorio": true, "opcoes_count": 50},
+        "valor": {"tipo": "input", "obrigatorio": true, "validacao": "moeda"},
+        "data_inicio": {"tipo": "date", "obrigatorio": true},
+        "duracao": {"tipo": "dropdown", "obrigatorio": true}
+      },
+      "opcoes_procedimento": [
+        "Implante", "Invisalign", "Aparelhos ortodonticos", "Clareamento",
+        "Proteses", "Lentes de contato dental", "Facetas", "Tratamento de canal",
+        "Extracao", "Limpeza/Profilaxia"
+      ],
+      "opcoes_duracao": [
+        {"valor": "menos_1_mes", "label": "Menos de 1 mes"},
+        {"valor": "1_3_meses", "label": "1-3 meses"},
+        {"valor": "3_6_meses", "label": "3-6 meses"},
+        {"valor": "6_12_meses", "label": "6-12 meses"},
+        {"valor": "mais_12_meses", "label": "Mais de 12 meses"}
+      ],
+      "fluxo": [
+        {"acao": "login"},
+        {"acao": "navegar", "destino": "Solicitacoes"},
+        {"acao": "clicar", "elemento": "+"},
+        {"acao": "preencher", "campo": "cpf"},
+        {"acao": "clicar", "elemento": "Confirmar cadastro"},
+        {"acao": "preencher", "campo": "nome"},
+        {"acao": "preencher", "campo": "whatsapp"},
+        {"acao": "selecionar", "campo": "procedimento"},
+        {"acao": "preencher", "campo": "valor"},
+        {"acao": "preencher", "campo": "data_inicio"},
+        {"acao": "selecionar", "campo": "duracao"},
+        {"acao": "clicar", "elemento": "Salvar"}
+      ]
+    },
+    {
+      "id": "maistodos",
+      "nome": "MaisTodos",
+      "url": "https://plataforma.maistodos.com.br/hub-credit/simulations/create",
+      "resposta": "instantanea",
+      "tipos_credito": ["CDC", "FGTS", "INSS"],
+      "prioridade": 4,
+      "campos": {
+        "cpf": {"tipo": "input", "obrigatorio": true, "validacao": "cpf"},
+        "nome": {"tipo": "input", "obrigatorio": true},
+        "data_nascimento": {"tipo": "date", "obrigatorio": true, "formato": "DD/MM/YYYY"},
+        "cep": {"tipo": "input", "obrigatorio": true, "validacao": "cep"},
+        "email": {"tipo": "input", "obrigatorio": true, "validacao": "email"},
+        "telefone": {"tipo": "input", "obrigatorio": true, "validacao": "telefone"},
+        "renda_mensal": {"tipo": "input", "obrigatorio": true, "validacao": "moeda"},
+        "valor_solicitado": {"tipo": "input", "obrigatorio": true, "validacao": "moeda"}
+      },
+      "fluxo": [
+        {"acao": "login"},
+        {"acao": "navegar", "destino": "Credito"},
+        {"acao": "navegar", "destino": "Simulacoes"},
+        {"acao": "clicar", "elemento": "Fazer simulacao"},
+        {"acao": "preencher_formulario"},
+        {"acao": "clicar", "elemento": "Salvar e simular"},
+        {"acao": "aguardar_resultado"}
+      ]
+    },
+    {
+      "id": "capim",
+      "nome": "Capim",
+      "url": "https://dash.capim.com.br",
+      "resposta": "instantanea",
+      "prioridade": 1,
+      "valor_range": {"min": 1000, "max": 30000},
+      "campos": {
+        "valor_tratamento": {"tipo": "input", "obrigatorio": true, "validacao": "moeda", "min": 1000, "max": 30000},
+        "cpf": {"tipo": "input", "obrigatorio": true, "validacao": "cpf"},
+        "telefone": {"tipo": "input", "obrigatorio": true, "validacao": "telefone"},
+        "situacao_profissional": {"tipo": "dropdown", "obrigatorio": true},
+        "cep": {"tipo": "input", "obrigatorio": true, "validacao": "cep"}
+      },
+      "opcoes_situacao_profissional": [
+        {"valor": "autonomo", "label": "Autonomo"},
+        {"valor": "empresario", "label": "Empresario"},
+        {"valor": "do_lar", "label": "Do lar"},
+        {"valor": "funcionario_publico", "label": "Funcionario publico"},
+        {"valor": "aposentado_pensionista", "label": "Aposentado/Pensionista"},
+        {"valor": "profissional_liberal", "label": "Profissional liberal"},
+        {"valor": "estudante", "label": "Estudante"},
+        {"valor": "desempregado", "label": "Desempregado"},
+        {"valor": "assalariado_registrado", "label": "Assalariado/Registrado"}
+      ],
+      "fluxo": [
+        {"acao": "login"},
+        {"acao": "navegar", "destino": "Financiamento Capim"},
+        {"acao": "clicar", "elemento": "Simular"},
+        {"acao": "preencher", "campo": "valor_tratamento", "etapa": 1},
+        {"acao": "clicar", "elemento": "Nao tenho paciente cadastrado", "etapa": 2},
+        {"acao": "preencher_formulario"},
+        {"acao": "marcar_checkbox", "elemento": "SCR"},
+        {"acao": "clicar", "elemento": "Continuar"},
+        {"acao": "aguardar_resultado", "etapa": 3}
+      ]
+    },
+    {
+      "id": "konsigapay",
+      "nome": "KonsigaPay",
+      "url_login": "https://entrar-dentista.konsigapay.com.br",
+      "url_simulacao": "https://cadastro-proposta.konsigapay.com.br",
+      "resposta": "instantanea",
+      "prioridade": 2,
+      "regras_especiais": ["NUNCA marcar Ira informar Avalista", "Fechar popup de anuncio", "Fechar modal de comunicado"],
+      "campos": {
+        "cpf": {"tipo": "input", "obrigatorio": true, "validacao": "cpf"},
+        "telefone": {"tipo": "input", "obrigatorio": true, "validacao": "telefone"},
+        "valor": {"tipo": "input", "obrigatorio": true, "validacao": "moeda"},
+        "data_vencimento": {"tipo": "dropdown", "obrigatorio": true, "opcoes": "datas_proximas"}
+      },
+      "fluxo": [
+        {"acao": "login"},
+        {"acao": "navegar", "destino": "Painel"},
+        {"acao": "clicar", "elemento": "CDC"},
+        {"acao": "fechar_popup", "condicional": true, "elemento": "anuncio"},
+        {"acao": "fechar_modal", "elemento": "Comunicado"},
+        {"acao": "clicar", "elemento": "Continuar"},
+        {"acao": "preencher_formulario"},
+        {"acao": "clicar", "elemento": "Calcular parcelas"},
+        {"acao": "aguardar_resultado"}
+      ]
+    },
+    {
+      "id": "drcash",
+      "nome": "Dr.Cash",
+      "url": "https://portal.drcash.com.br",
+      "resposta": "instantanea",
+      "prioridade": 3,
+      "campos": {
+        "clinica": {"tipo": "dropdown", "obrigatorio": true, "auto_preenchido": true},
+        "cpf": {"tipo": "input", "obrigatorio": true, "validacao": "cpf"},
+        "cep": {"tipo": "input", "obrigatorio": true, "validacao": "cep"},
+        "celular": {"tipo": "input", "obrigatorio": true, "validacao": "telefone"},
+        "email": {"tipo": "input", "obrigatorio": true, "validacao": "email"}
+      },
+      "fluxo": [
+        {"acao": "login"},
+        {"acao": "clicar", "elemento": "Nova simulacao"},
+        {"acao": "preencher_formulario", "etapa": 1},
+        {"acao": "clicar", "elemento": "Proximo"},
+        {"acao": "aguardar_resultado", "etapa": 2}
+      ]
+    }
+  ]
+}
