@@ -1,6 +1,6 @@
 # 📍 Status Projeto Doutorizze/Arsenal SYNTX
 
-**Última atualização:** 13/12/2024 - 19h
+**Última atualização:** 13/12/2024 - 22h30
 
 ---
 
@@ -23,79 +23,58 @@
 
 ---
 
-## ⚠️ Diagnóstico Arsenal SYNTX (13/12/2024)
+## ✅ Fase 2: Sistema de Fila (CONCLUÍDA - 13/12/2024)
 
-### O que EXISTE em ~/arsenal-syntx/:
-- ✅ Pasta existe
-- ✅ Docker rodando (n8n, Redis, postgres-leads, telegram-bot)
-- ✅ Redis disponível para fila
-- ✅ Bot Telegram básico
+### Arquivos criados em ~/arsenal-syntx/:
+- workers/driver_base.py - Classe base Playwright
+- queue/redis_queue.py - Interface com Redis
+- queue/job_processor.py - Processa 1 lead por vez
+- queue/models.py - Estruturas de dados
+- api/main.py - FastAPI endpoints
+- Dockerfile.playwright - Container com browser
+- requirements.txt
+- docker-compose.override.yml
 
-### O que NÃO EXISTE (precisa criar):
-- ❌ workers/ - drivers das financeiras
-- ❌ queue/ - sistema de fila
-- ❌ playwright/ - browser automation
-- ❌ driver_base.py - template
-- ❌ Drivers das 6 financeiras
+### API Endpoints:
+| Método | Endpoint | Função |
+|--------|----------|--------|
+| POST | /simular | Adiciona lead à fila |
+| GET | /status/{job_id} | Consulta resultado |
+| GET | /queue | Status da fila |
+| GET | /financeiras | Lista com locks |
+| POST | /webhook/lead | Webhook n8n |
 
-### Containers rodando:
-| Container | Status | Função |
-|-----------|--------|--------|
-| n8n | ✅ Up | Automação workflows |
-| postgres-leads | ✅ Up | Banco de leads |
-| telegram-bot | ✅ Up | Bot básico |
-| redis | ✅ Up | Cache/Fila |
+### Fluxo:
+1. Lead chega → POST /webhook/lead
+2. Entra na fila Redis
+3. JobProcessor dispara 6 financeiras EM PARALELO
+4. Lock por financeira (nunca 2 simultâneos)
+5. Resultados → Callback n8n
 
 ---
 
-## 🔄 Fase 2: Implementação (PENDENTE)
+## 🔄 Fase 3: Drivers Financeiras (EM ANDAMENTO)
 
-### Estrutura a criar em ~/arsenal-syntx/:
-```
-arsenal-syntx/
-├── workers/
-│   ├── __init__.py
-│   ├── driver_base.py        # Classe base Playwright
-│   ├── driver_capim.py       # Prioridade 1
-│   ├── driver_konsigapay.py  # Prioridade 2
-│   ├── driver_drcash.py      # Prioridade 3
-│   ├── driver_maistodos.py   # Prioridade 4
-│   ├── driver_parcelamais.py # Prioridade 5
-│   └── driver_aviva.py       # Prioridade 6
-│
-├── queue/
-│   ├── __init__.py
-│   └── job_processor.py      # Processa fila Redis
-│
-├── api/
-│   └── webhook.py            # Recebe do n8n
-│
-├── Dockerfile.playwright
-└── requirements.txt
-```
-
-### Fluxo planejado:
-```
-n8n (lead) → Webhook → Redis Queue → Worker → 6 Financeiras → PostgreSQL → n8n
-```
-
-### Decisões pendentes:
-- [ ] Simulação paralela vs sequencial?
-- [ ] Quantas simulações simultâneas por financeira?
-- [ ] Tempo de espera entre simulações?
-- [ ] Retry em caso de falha?
-- [ ] Volume esperado de leads (dia/hora)?
+### Status dos Drivers:
+| # | Financeira | Driver | Status |
+|---|------------|--------|--------|
+| 1 | Capim | driver_capim.py | 🔄 Implementando |
+| 2 | KonsigaPay | driver_konsigapay.py | ⏳ Pendente |
+| 3 | Dr.Cash | driver_drcash.py | ⏳ Pendente |
+| 4 | MaisTodos | driver_maistodos.py | ⏳ Pendente |
+| 5 | Parcela Mais | driver_parcelamais.py | ⏳ Pendente |
+| 6 | AVIVA | driver_aviva.py | ⏳ Pendente |
 
 ---
 
 ## 🔮 Fases Futuras
 
-### Fase 3: Integração n8n
+### Fase 4: Integração n8n
 - Webhook recebe dados do paciente
 - Dispara Arsenal SYNTX
 - Retorna resultados
 
-### Fase 4: Front-end Doutorizze
+### Fase 5: Front-end Doutorizze
 - Interface para dentistas
 - Dashboard de simulações
 
@@ -103,11 +82,23 @@ n8n (lead) → Webhook → Redis Queue → Worker → 6 Financeiras → PostgreS
 
 ## 📝 Histórico
 
-### 13/12/2024
+### 13/12/2024 - 22h30
+- Implementado driver_capim.py (Prioridade 1)
+- Sistema de fila funcionando
+
+### 13/12/2024 - 22h
+- Fase 2 concluída
+- workers/, queue/, api/ criados
+- Redis testado e funcionando
+- Estrutura completa implementada
+
+### 13/12/2024 - 19h
+- Diagnóstico Arsenal SYNTX
+- Descoberto que NÃO tinha workers/drivers
+
+### 13/12/2024 - 18h
 - Mapeamento das 6 financeiras concluído
 - Credenciais configuradas em .env.financeiras
-- Diagnóstico Arsenal SYNTX realizado
-- Descoberto que NÃO tem workers/drivers implementados
 
 ---
 
