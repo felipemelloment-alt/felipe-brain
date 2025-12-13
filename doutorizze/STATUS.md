@@ -1,69 +1,56 @@
-# 📍 Status Projeto Doutorizze
+# 📍 Status Projeto Doutorizze/Arsenal SYNTX
 
-## ✅ Fase 1: Mapeamento (CONCLUÍDA - 13/12/2024)
-
-### Arquivos criados:
-- `FINANCEIRAS.md` - Documentação completa com fluxos
-- `financeiras.json` - Estrutura JSON para código
-- `.env.financeiras` - Credenciais (NÃO COMMITAR!)
-- `.gitignore` - Atualizado para ignorar credenciais
-
-### 6 Financeiras mapeadas:
-
-| # | Financeira | URL | Resposta | Prioridade |
-|---|------------|-----|----------|------------|
-| 1 | Parcela Mais | parcelamais.com | Manual | 5 |
-| 2 | AVIVA | avivapay.com.br | Manual | 6 |
-| 3 | MaisTodos | maistodos.com.br | Instantânea | 4 |
-| 4 | Capim | capim.com.br | Instantânea | 1 |
-| 5 | KonsigaPay | konsigapay.com.br | Instantânea | 2 |
-| 6 | Dr.Cash | drcash.com.br | Instantânea | 3 |
-
-### Credenciais configuradas:
-- ✅ Todas as 6 financeiras com login/senha no `.env.financeiras`
-- ✅ Arquivo protegido (não vai pro GitHub)
+**Última atualização:** 13/12/2024 - 19h
 
 ---
 
-## ⚠️ Diagnóstico Arsenal SYNTX (13/12/2024 - 19h)
+## ✅ Fase 1: Mapeamento (CONCLUÍDA)
 
-### O que EXISTE:
-- ✅ Infraestrutura Docker rodando (Oracle 164.152.59.49)
-- ✅ Redis (pode ser usado pra fila)
-- ✅ n8n funcionando (v1.123.5)
-- ✅ Bot Telegram básico (@dcaibr_bot)
-- ✅ Pasta ~/arsenal-syntx/ existe
-- ✅ PostgreSQL leads rodando
+### Arquivos criados em ~/felipe-brain/doutorizze/:
+- FINANCEIRAS.md - Documentação completa das 6 financeiras
+- financeiras.json - Estrutura JSON para código
+- .env.financeiras - Credenciais preenchidas (NÃO COMMITAR)
+
+### 6 Financeiras mapeadas e com credenciais:
+| # | Financeira | Resposta | Credencial |
+|---|------------|----------|------------|
+| 1 | Capim | Instantânea | ✅ |
+| 2 | KonsigaPay | Instantânea | ✅ |
+| 3 | Dr.Cash | Instantânea | ✅ |
+| 4 | MaisTodos | Instantânea | ✅ |
+| 5 | Parcela Mais | Manual | ✅ |
+| 6 | AVIVA | Manual | ✅ |
+
+---
+
+## ⚠️ Diagnóstico Arsenal SYNTX (13/12/2024)
+
+### O que EXISTE em ~/arsenal-syntx/:
+- ✅ Pasta existe
+- ✅ Docker rodando (n8n, Redis, postgres-leads, telegram-bot)
+- ✅ Redis disponível para fila
+- ✅ Bot Telegram básico
 
 ### O que NÃO EXISTE (precisa criar):
-- ❌ `workers/` (drivers das financeiras)
-- ❌ `queue/` (sistema de fila)
-- ❌ Playwright (browser automation)
-- ❌ `driver_base.py` (template)
+- ❌ workers/ - drivers das financeiras
+- ❌ queue/ - sistema de fila
+- ❌ playwright/ - browser automation
+- ❌ driver_base.py - template
 - ❌ Drivers das 6 financeiras
 
 ### Containers rodando:
-
 | Container | Status | Função |
 |-----------|--------|--------|
-| n8n | ✅ Up 28h | Automação workflows |
-| postgres-leads | ✅ Up 2d | Banco de leads |
-| telegram-bot | ✅ Up 11d | Bot orquestrador |
-| redis | ✅ Up 11d | Cache/Fila |
-
-### Bot Telegram atual:
-- `/start` - Boas-vindas
-- `/status` - Status básico
-- `/ias` - Lista 85 perfis TCS SPY
-- `/help` - Ajuda
-- **NÃO** tem orquestração real de financeiras
+| n8n | ✅ Up | Automação workflows |
+| postgres-leads | ✅ Up | Banco de leads |
+| telegram-bot | ✅ Up | Bot básico |
+| redis | ✅ Up | Cache/Fila |
 
 ---
 
-## 🔄 Fase 2: Implementação Arsenal SYNTX (A FAZER)
+## 🔄 Fase 2: Implementação (PENDENTE)
 
 ### Estrutura a criar em ~/arsenal-syntx/:
-
 ```
 arsenal-syntx/
 ├── workers/
@@ -78,98 +65,35 @@ arsenal-syntx/
 │
 ├── queue/
 │   ├── __init__.py
-│   ├── job_processor.py      # Processa fila Redis
-│   └── models.py             # Modelos de job
+│   └── job_processor.py      # Processa fila Redis
 │
 ├── api/
-│   ├── __init__.py
-│   └── webhook.py            # Recebe requisições do n8n
+│   └── webhook.py            # Recebe do n8n
 │
-├── Dockerfile.playwright     # Container com Playwright
-├── requirements.txt          # Dependências Python
-└── docker-compose.override.yml  # Adiciona worker ao compose
+├── Dockerfile.playwright
+└── requirements.txt
 ```
-
-### Tecnologias:
-- **Playwright** - Browser automation (suporta login persistente)
-- **Redis** - Fila de jobs (já rodando!)
-- **FastAPI** - Webhook para receber do n8n
-- **PostgreSQL** - Salvar resultados (já rodando!)
 
 ### Fluxo planejado:
 ```
-n8n (lead chega)
-    ↓
-Webhook FastAPI
-    ↓
-Redis Queue (job)
-    ↓
-Worker Playwright
-    ↓
-Simula nas 6 financeiras
-    ↓
-Salva no PostgreSQL
-    ↓
-Retorna pro n8n
+n8n (lead) → Webhook → Redis Queue → Worker → 6 Financeiras → PostgreSQL → n8n
 ```
 
 ### Decisões pendentes:
-- [ ] Paralelo vs Sequencial (começar sequencial, depois paralelo)
-- [ ] Parar na 1ª aprovação ou mostrar todas?
+- [ ] Paralelo vs Sequencial
+- [ ] Parar na 1ª aprovação ou todas
 - [ ] Timeout por financeira (sugestão: 60s)
-- [ ] Retry em caso de falha (sugestão: 1x)
-- [ ] Screenshots de comprovação
 
 ---
 
-## 🔮 Fases Futuras
+## 📝 Histórico
 
-### Fase 3: Integração n8n
-- Webhook recebe dados do paciente
-- Dispara Arsenal SYNTX
-- Retorna resultados para IA Natália
-- Salva no PostgreSQL (lead_sessions)
-
-### Fase 4: Front-end Doutorizze
-- Interface para dentistas
-- Dashboard de simulações
-- Histórico de leads
-- Relatórios de conversão
-
-### Fase 5: Escala
-- Multi-clínica
-- API pública para parceiros
-- White-label
+### 13/12/2024
+- Mapeamento das 6 financeiras concluído
+- Credenciais configuradas em .env.financeiras
+- Diagnóstico Arsenal SYNTX realizado
+- Descoberto que NÃO tem workers/drivers implementados
 
 ---
 
-## 📊 Métricas (a implementar)
-
-| Métrica | Atual | Meta |
-|---------|-------|------|
-| Simulações/dia | 0 | 100+ |
-| Taxa aprovação | - | 40%+ |
-| Tempo médio simulação | - | < 60s |
-| Financeiras ativas | 0/6 | 6/6 |
-| Drivers implementados | 0/6 | 6/6 |
-
----
-
-## 📝 Histórico de Sessões
-
-### 13/12/2024 - 19h - Diagnóstico Arsenal SYNTX
-- Verificado estrutura real do arsenal-syntx
-- Descoberto que NÃO tem workers/drivers
-- Bot Telegram é apenas placeholder
-- Redis pode ser usado como fila
-- Definido estrutura para Fase 2
-
-### 13/12/2024 - 18h - Mapeamento Completo
-- Criado estrutura ~/felipe-brain/doutorizze/
-- Mapeadas 6 financeiras com fluxos detalhados
-- Configuradas credenciais no .env.financeiras
-- Commit no GitHub (10f6cbf)
-
----
-
-*Última atualização: 13/12/2024 19:30*
+*Arquivo: ~/felipe-brain/doutorizze/STATUS.md*
