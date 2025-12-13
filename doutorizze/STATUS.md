@@ -80,9 +80,24 @@ n8n (lead) → Webhook → Redis Queue → Worker → 6 Financeiras → PostgreS
 ```
 
 ### Decisões pendentes:
-- [ ] Paralelo vs Sequencial
-- [ ] Parar na 1ª aprovação ou todas
-- [ ] Timeout por financeira (sugestão: 60s)
+- [ ] Simulação paralela vs sequencial?
+- [ ] Quantas simulações simultâneas por financeira?
+- [ ] Tempo de espera entre simulações?
+- [ ] Retry em caso de falha?
+- [ ] Volume esperado de leads (dia/hora)?
+
+---
+
+## 🔮 Fases Futuras
+
+### Fase 3: Integração n8n
+- Webhook recebe dados do paciente
+- Dispara Arsenal SYNTX
+- Retorna resultados
+
+### Fase 4: Front-end Doutorizze
+- Interface para dentistas
+- Dashboard de simulações
 
 ---
 
