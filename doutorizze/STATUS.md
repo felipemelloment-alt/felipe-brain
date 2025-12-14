@@ -103,3 +103,12 @@
 ---
 
 *Arquivo: ~/felipe-brain/doutorizze/STATUS.md*
+
+---
+
+## 🎉 MARCO: Login Capim Funcionou! (14/12/2024 00:01)
+
+- ✅ Playwright rodando no Oracle ARM64
+- ✅ Browser inicializado
+- ✅ Login no Capim funcionou
+- ✅ Driver Capim testado com sucesso

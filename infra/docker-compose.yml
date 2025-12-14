@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres-leads:
+    image: postgres:15-alpine
+    container_name: postgres-leads
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: creditoodonto_leads
+      POSTGRES_USER: felipe
+      POSTGRES_PASSWORD: LeadsCO2024!
+    ports:
+      - "5433:5432"
+    volumes:
+      - ~/postgres-leads-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U felipe -d creditoodonto_leads"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  default:
+    name: leads-network
